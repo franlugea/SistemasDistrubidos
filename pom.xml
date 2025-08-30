@@ -33,7 +33,6 @@
 			<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 			<resource.encoding>UTF-8</resource.encoding>
 
-
 	</properties>
 	<dependencies>
 
