@@ -1,5 +1,5 @@
 
-FROM openjdk:21-jdk-slim AS build
+FROM eclipse-temurin:21-jdk-jammy AS build
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ COPY src ./src
 
 RUN mvn clean package -DskipTests
 
-FROM openjdk:21-jre-slim
+FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
 
