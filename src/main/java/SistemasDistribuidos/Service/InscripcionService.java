@@ -71,7 +71,7 @@ public class InscripcionService {
         }
     }
 
-    public List<Inscriptos> mostrarInscripciones(){
-        return inscriptosRepository.findAll();
+    public List<InscripcionDto> mostrarInscripciones(){
+        return inscripcionMapper.toListInscripcionDto(inscriptosRepository.findAll());
     }
 }

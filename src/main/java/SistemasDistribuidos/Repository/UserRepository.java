@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<Usuario, Long> {
 
     Usuario findByAuth0Id(String auth0Id);
+
+    boolean existsByAuth0Id(String auth0Id);
 }

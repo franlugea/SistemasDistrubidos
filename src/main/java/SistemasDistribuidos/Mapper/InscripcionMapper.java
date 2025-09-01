@@ -12,11 +12,14 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import java.util.List;
 import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface InscripcionMapper {
     InscripcionDto toInscripcionDto(Inscriptos inscriptos);
+
+    List<InscripcionDto> toListInscripcionDto(List<Inscriptos> inscriptos);
 
     UsuarioDto toUsuarioDto(Usuario usuario);
 

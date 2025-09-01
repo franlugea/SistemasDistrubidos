@@ -1,11 +1,14 @@
 package SistemasDistribuidos.Controlador;
 
+import SistemasDistribuidos.Entity.Dto.InscripcionDto;
 import SistemasDistribuidos.Service.InscripcionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/privada/inscripcion")
@@ -25,5 +28,10 @@ public class InscripcionController {
         String auth0Id=jwt.getClaimAsString("sub");
         inscripcionService.anularInscripcion(auth0Id,idClase);
         return ResponseEntity.ok("Inscripcion anulada exitosamente");
+    }
+
+    @GetMapping("mostrarInscriptos")
+    public ResponseEntity<List<InscripcionDto>> mostrarInscriptos(){
+        return ResponseEntity.ok(inscripcionService.mostrarInscripciones());
     }
 }

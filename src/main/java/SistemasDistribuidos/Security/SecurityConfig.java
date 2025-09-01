@@ -35,9 +35,9 @@ public class SecurityConfig {
                 .cors(cors-> corsConfigurationSource())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/public/**").hasRole("USER")
-                        .requestMatchers("/api/private/**").authenticated()
-                        .anyRequest().authenticated())
+                       // .requestMatchers("/api/public/**").hasRole("USER")
+                       // .requestMatchers("/api/private/**").authenticated()
+                        .anyRequest().permitAll())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt
                                 .decoder(jwtDecoder())
