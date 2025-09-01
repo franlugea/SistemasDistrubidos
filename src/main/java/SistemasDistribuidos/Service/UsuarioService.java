@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -27,7 +28,9 @@ public class UsuarioService {
             throw new UsernameNotFoundException("Ya existe el usuario con auth0Id: " + usuarioDto.auth0Id());
         }
 
-        Set<Rol> roles= roleRepository.findByNombreIn(usuarioDto.roles());
+        Set<Rol> roles = roleRepository.findByNombreIn(
+                mapearRoles(usuarioDto.roles())
+        );
         Usuario usuario =Usuario
                 .builder()
                 .auth0Id(usuarioDto.auth0Id())
@@ -38,5 +41,15 @@ public class UsuarioService {
 
         userRepository.save(usuario);
         
+    }
+
+    private List<RoleEnum> mapearRoles(List<String> rolesString) {
+        return rolesString.stream()
+                .map(role -> switch(role.toLowerCase()) {
+                    case "admin" -> RoleEnum.ADMIN;
+                    case "user" -> RoleEnum.USER;
+                    default -> RoleEnum.USER; // Por defecto USER
+                })
+                .toList();
     }
 }
