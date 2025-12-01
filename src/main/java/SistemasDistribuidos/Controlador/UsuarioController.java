@@ -1,7 +1,6 @@
 package SistemasDistribuidos.Controlador;
 
 import SistemasDistribuidos.Entity.Dto.CrearUsuarioDto;
-import SistemasDistribuidos.Entity.Dto.UsuarioDto;
 import SistemasDistribuidos.Service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,7 @@ public class UsuarioController {
     @Autowired
     UsuarioService usuarioService;
 
-    @PostMapping("/crearUsuario")
+    @PostMapping
     public ResponseEntity<?> crearUsuario(@RequestBody CrearUsuarioDto usuarioDto) {
         usuarioService.registrarUsuario(usuarioDto);
        return ResponseEntity.ok("Usuario creado correctamente");

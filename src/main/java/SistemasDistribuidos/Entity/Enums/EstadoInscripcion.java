@@ -1,7 +1,6 @@
 package SistemasDistribuidos.Entity.Enums;
 
-public enum EstadoClaseEnum {
+public enum EstadoInscripcion {
     ACTIVA,
-    INACTIVA,
     CANCELADA
 }

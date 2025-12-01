@@ -11,27 +11,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/privada/inscripcion")
+@RequestMapping("api/inscripcion")
 public class InscripcionController {
 
     @Autowired
     private InscripcionService inscripcionService;
 
-    @PostMapping("inscribirUsuario/{idClase}")
+    @PostMapping("/{idClase}/inscribir")
     public ResponseEntity<?> inscribirUsuario(@PathVariable Long idClase, @AuthenticationPrincipal Jwt jwt){
-        String auth0Id=jwt.getClaimAsString("sub");
+        String auth0Id= "auth0|123"; //jwt.getClaimAsString("sub");
         return ResponseEntity.ok(inscripcionService.incribirUsuario(auth0Id,idClase));
     }
 
-    @DeleteMapping("anularInscripcion/{idClase}")
+    @PostMapping("/{idClase}/anular")
     public ResponseEntity<?> anularInscripcion(@PathVariable Long idClase,@AuthenticationPrincipal Jwt jwt) {
-        String auth0Id=jwt.getClaimAsString("sub");
+        String auth0Id="auth0|123"; //jwt.getClaimAsString("sub");
         inscripcionService.anularInscripcion(auth0Id,idClase);
         return ResponseEntity.ok("Inscripcion anulada exitosamente");
     }
 
-    @GetMapping("mostrarInscriptos")
-    public ResponseEntity<List<InscripcionDto>> mostrarInscriptos(){
-        return ResponseEntity.ok(inscripcionService.mostrarInscripciones());
+    @GetMapping("/{idClase}")
+    public ResponseEntity<?> obtenerUsuariosInscriptos(@PathVariable Long idClase) {
+        return ResponseEntity.ok(inscripcionService.obtenerUsuariosInscriptos(idClase));
     }
+
+    @GetMapping("/clases")
+    public ResponseEntity<?> obtenerClasesDelUsuario(@AuthenticationPrincipal Jwt jwt){
+        String auth0Id= "auth0|123"; //jwt.getClaimAsString("sub");
+        return ResponseEntity.ok(inscripcionService.obtenerClasesDelUsuario(auth0Id));
+    }
+
+    
 }

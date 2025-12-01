@@ -1,10 +1,7 @@
 package SistemasDistribuidos.Mapper;
 
 import SistemasDistribuidos.Entity.Clase;
-import SistemasDistribuidos.Entity.Dto.ClaseDto;
-import SistemasDistribuidos.Entity.Dto.InscripcionDto;
-import SistemasDistribuidos.Entity.Dto.RolDto;
-import SistemasDistribuidos.Entity.Dto.UsuarioDto;
+import SistemasDistribuidos.Entity.Dto.*;
 import SistemasDistribuidos.Entity.Inscriptos;
 import SistemasDistribuidos.Entity.Rol;
 import SistemasDistribuidos.Entity.Usuario;
@@ -17,9 +14,6 @@ import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface InscripcionMapper {
-    InscripcionDto toInscripcionDto(Inscriptos inscriptos);
-
-    List<InscripcionDto> toListInscripcionDto(List<Inscriptos> inscriptos);
 
     UsuarioDto toUsuarioDto(Usuario usuario);
 
@@ -27,9 +21,11 @@ public interface InscripcionMapper {
     @Mapping(source = "estadoClase", target = "estadoClase", qualifiedByName = "enumToString")
     ClaseDto toClaseDto(Clase clase);
 
-    @Mapping(source = "nombre", target = "nombre", qualifiedByName = "enumToString")
+    InscripcionDto toInscripcionDto(Inscriptos inscriptos);
+
+    /*@Mapping(source = "nombre", target = "nombre", qualifiedByName = "enumToString")
     RolDto toRolDto(Rol rol);
-    Set<RolDto> toRolDtos(Set<Rol> roles);
+    Set<RolDto> toRolDtos(Set<Rol> roles);*/
 
     @Named("enumToString")
     default String enumToString(Enum<?> enumValue) {

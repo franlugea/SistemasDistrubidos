@@ -45,15 +45,14 @@ public class SistemasDistribuidosApplication implements CommandLineRunner {
 		roleRepository.save(rol);
 		roleRepository.save(rol1);
 
-
-
-		Rol rol=roleRepository.findById(1L).get();
+        Rol rol2 = roleRepository.findFirstByNombre(RoleEnum.ADMIN);
+		Rol rol3 = roleRepository.findFirstByNombre(RoleEnum.USER);
 
 		Usuario usuario = Usuario.builder()
+				.auth0Id("auth0|123")
 				.nombre("Francisco")
 				.email("franlugea03@gmail.com")
-				.contraseña("Pancho50@")
-				.roles(Set.of(rol))
+				.roles(Set.of(rol2,rol3))
 				.build();
 		usuario = userRepository.save(usuario);
 

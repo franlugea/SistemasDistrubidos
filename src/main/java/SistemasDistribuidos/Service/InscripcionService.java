@@ -1,18 +1,22 @@
 package SistemasDistribuidos.Service;
 
 import SistemasDistribuidos.Entity.Clase;
+import SistemasDistribuidos.Entity.Dto.ClaseDto;
 import SistemasDistribuidos.Entity.Dto.InscripcionDto;
+import SistemasDistribuidos.Entity.Dto.InscriptoDto;
 import SistemasDistribuidos.Entity.Enums.EstadoClaseEnum;
+import SistemasDistribuidos.Entity.Enums.EstadoInscripcion;
 import SistemasDistribuidos.Entity.Inscriptos;
 import SistemasDistribuidos.Entity.Usuario;
+import SistemasDistribuidos.Mapper.ClaseMapper;
 import SistemasDistribuidos.Mapper.InscripcionMapper;
 import SistemasDistribuidos.Repository.ClaseRepository;
 import SistemasDistribuidos.Repository.InscriptosRepository;
 import SistemasDistribuidos.Repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,10 +32,13 @@ public class InscripcionService {
     @Autowired
     private InscripcionMapper inscripcionMapper;
 
+    @Autowired
+    private ClaseMapper claseMapper;
+
 
     @Transactional
     public InscripcionDto incribirUsuario(String auth0Id ,Long idClase) {
-        Long idUser= userRepository.findByAuth0Id(auth0Id).getId();
+       Long idUser= userRepository.findByAuth0Id(auth0Id).getId();
        Usuario usuario= userRepository.findById(idUser)
                .orElseThrow(()-> new EntityNotFoundException("Usuario no encontrado"));
 
@@ -42,15 +49,21 @@ public class InscripcionService {
            throw new EntityNotFoundException("Inscripciones no disponibles");
        }
 
-       if(inscriptosRepository.existsByUsuario_IdAndClase_Id(idUser, idClase)){
-           throw new RuntimeException("El usuario ya esta inscripto");
+       if(inscriptosRepository.existsByUsuarioIdAndClaseIdAndEstadoInscripcion(idUser, idClase, EstadoInscripcion.ACTIVA)){
+           throw new RuntimeException("El usuario ya esta inscripto en esta clase");
+       }
+
+       if(clase.getCupo_disponible()<=0){
+           throw new RuntimeException("No hay cupo disponible");
        }
 
        Inscriptos inscripcion= Inscriptos.builder()
                .usuario(usuario)
                .clase(clase)
+               .estadoInscripcion(EstadoInscripcion.ACTIVA)
                .build();
-       inscriptosRepository.save(inscripcion);
+
+        inscripcion=inscriptosRepository.save(inscripcion);
 
        actualizarCupo(clase);
 
@@ -66,12 +79,30 @@ public class InscripcionService {
     @Transactional
     public void anularInscripcion(String auth0Id ,Long idClase) {
         Long idUser= userRepository.findByAuth0Id(auth0Id).getId();
-        if(inscriptosRepository.existsByUsuario_IdAndClase_Id(idUser, idClase)){
-            inscriptosRepository.removeInscriptosByUsuario_IdAndClase_Id(idUser, idClase);
-        }
+        Inscriptos inscripcion= inscriptosRepository.findByUsuarioIdAndClaseIdAndEstadoInscripcion(
+                idUser, idClase, EstadoInscripcion.ACTIVA).orElseThrow(()-> new EntityNotFoundException("Inscripcion no encontrado"));
+
+        inscripcion.setEstadoInscripcion(EstadoInscripcion.CANCELADA);
+        inscriptosRepository.save(inscripcion);
+
+        Clase clase=inscripcion.getClase();
+        clase.setCupo_disponible(clase.getCupo_disponible()+1);
+        claseRepository.save(clase);
     }
 
-    public List<InscripcionDto> mostrarInscripciones(){
-        return inscripcionMapper.toListInscripcionDto(inscriptosRepository.findAll());
+
+    public List<ClaseDto> obtenerClasesDelUsuario(String auth0Id) {
+        Long idUsuario= userRepository.findByAuth0Id(auth0Id).getId();
+        List<Clase> clases= inscriptosRepository.findByUsuarioIdAndEstadoInscripcion(idUsuario,EstadoInscripcion.ACTIVA)
+                .stream()
+                .map(Inscriptos::getClase)
+                .toList();
+        return claseMapper.toClaseDtoList(clases);
     }
+
+    public List<InscriptoDto> obtenerUsuariosInscriptos(Long idClase) {
+        return  inscriptosRepository.findByClaseIdWithUsuario(idClase);
+
+    }
+
 }

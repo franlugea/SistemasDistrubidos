@@ -9,16 +9,15 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String auth0Id;
     private String nombre;
-    private String contraseña;
     private String email;
 
     @ManyToMany(fetch = FetchType.EAGER)

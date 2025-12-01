@@ -1,18 +1,21 @@
 package SistemasDistribuidos.Service;
 
 import SistemasDistribuidos.Entity.Dto.CrearUsuarioDto;
-import SistemasDistribuidos.Entity.Dto.UsuarioDto;
 import SistemasDistribuidos.Entity.Enums.RoleEnum;
 import SistemasDistribuidos.Entity.Rol;
 import SistemasDistribuidos.Entity.Usuario;
+import SistemasDistribuidos.Mapper.UsuarioMapper;
 import SistemasDistribuidos.Repository.RoleRepository;
 import SistemasDistribuidos.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -21,35 +24,29 @@ public class UsuarioService {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    UsuarioMapper usuarioMapper;
 
-
+    @Transactional
     public void registrarUsuario(CrearUsuarioDto usuarioDto) {
         if(userRepository.existsByAuth0Id(usuarioDto.auth0Id())){
             throw new UsernameNotFoundException("Ya existe el usuario con auth0Id: " + usuarioDto.auth0Id());
         }
 
-        Set<Rol> roles = roleRepository.findByNombreIn(
-                mapearRoles(usuarioDto.roles())
-        );
-        Usuario usuario =Usuario
-                .builder()
-                .auth0Id(usuarioDto.auth0Id())
-                .nombre(usuarioDto.nombre())
-                .email(usuarioDto.email())
-                .roles(roles)
-                .build();
+
+        Usuario usuario= usuarioMapper.usuarioDtoToUsuario(usuarioDto);
+
+        Set<Rol> roles = usuarioDto.roles().stream()
+                .map(nombreRol -> {
+                    RoleEnum roleEnum = RoleEnum.valueOf(nombreRol);
+                    return roleRepository.findFirstByNombre(roleEnum);
+                })
+                .collect(Collectors.toSet());
+
+        usuario.setRoles(roles);
 
         userRepository.save(usuario);
         
     }
 
-    private List<RoleEnum> mapearRoles(List<String> rolesString) {
-        return rolesString.stream()
-                .map(role -> switch(role.toLowerCase()) {
-                    case "admin" -> RoleEnum.ADMIN;
-                    case "user" -> RoleEnum.USER;
-                    default -> RoleEnum.USER; // Por defecto USER
-                })
-                .toList();
-    }
 }
