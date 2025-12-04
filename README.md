@@ -45,8 +45,8 @@ auth0.audience=${AUTH0_AUDIENCE}
 
 -- Seguridad JWT --
 
-spring.security.oauth2.resourceserver.jwt.issuer-uri=https://dev-j4oh22azd4aciul5.us.auth0.com/
-spring.security.oauth2.resourceserver.jwt.jwk-set-uri=https://dev-j4oh22azd4aciul5.us.auth0.com/.well-known/jwks.json
+spring.security.oauth2.resourceserver.jwt.issuer-uri=${AUTH0_ISSUER_URI}
+spring.security.oauth2.resourceserver.jwt.jwk-set-uri=${AUTH0_JWKS_URI}
 ```
 
 ### Varaibles de entorno necesarias
@@ -61,6 +61,8 @@ spring.security.oauth2.resourceserver.jwt.jwk-set-uri=https://dev-j4oh22azd4aciu
 * `AUTH0_CLIENT=` Client ID de la aplicación configurada en Auth0
 * `AUTH0_SECRET=` Client Secret de Auth0 (usado para validación interna)
 * `AUTH0_AUDIENCE=` Identificador de la API configurada en Auth0
+* `AUTH0_ISSUER_URI=` URL del emisor de Auth0
+* `AUTH0_JWKS_URI=` URL para descargar la clave publica (JSON Web Key Set)
 
 
 ## Instrucciones de instalación y ejecución
