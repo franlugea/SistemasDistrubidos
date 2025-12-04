@@ -1,8 +1,7 @@
 package SistemasDistribuidos.Mapper;
 
-import SistemasDistribuidos.Entity.Dto.CrearUsuarioDto;
-import SistemasDistribuidos.Entity.Dto.UsuarioDto;
-import SistemasDistribuidos.Entity.Usuario;
+import SistemasDistribuidos.Entidades.Dto.CrearUsuarioDto;
+import SistemasDistribuidos.Entidades.Usuario;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

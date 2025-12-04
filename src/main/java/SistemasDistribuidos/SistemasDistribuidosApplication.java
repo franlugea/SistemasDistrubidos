@@ -1,10 +1,11 @@
 package SistemasDistribuidos;
 
-import SistemasDistribuidos.Entity.*;
-import SistemasDistribuidos.Entity.Enums.ActividadFisicaEnum;
-import SistemasDistribuidos.Entity.Enums.DiaSemana;
-import SistemasDistribuidos.Entity.Enums.RoleEnum;
-import SistemasDistribuidos.Repository.*;
+import SistemasDistribuidos.Entidades.ActividadFisica;
+import SistemasDistribuidos.Entidades.Enums.ActividadFisicaEnum;
+import SistemasDistribuidos.Entidades.Enums.RolEnum;
+import SistemasDistribuidos.Entidades.Rol;
+import SistemasDistribuidos.Entidades.Usuario;
+import SistemasDistribuidos.Repositorios.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -12,41 +13,40 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 
 @SpringBootApplication
 public class SistemasDistribuidosApplication implements CommandLineRunner {
 	@Autowired
-	UserRepository userRepository;
+	UsuarioRepositorio usuarioRepositorio;
 	@Autowired
-	RoleRepository roleRepository;
+	RolRepositorio rolRepositorio;
 
 	@Autowired
-	ActividadFisicaRepository actividadFisicaRepository;
+	ActividadFisicaRepositorio actividadFisicaRepositorio;
 
 
 	BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
-	ClaseRepository claseRepository;
+	ClaseRepositorio claseRepositorio;
 	@Autowired
-	InscriptosRepository inscriptosRepository;
+	InscriptosRepositorio inscriptosRepositorio;
 	@Transactional
 	@Override
 	public void run(String... args) throws Exception {
 		/*Rol rol = new Rol();
-		rol.setNombre(RoleEnum.USER);
+		rol.setNombre(RolEnum.USER);
 
 		Rol rol1 = new Rol();
-		rol1.setNombre(RoleEnum.ADMIN);
+		rol1.setNombre(RolEnum.ADMIN);
 
-		roleRepository.save(rol);
-		roleRepository.save(rol1);
+		rolRepositorio.save(rol);
+		rolRepositorio.save(rol1);
 
-        Rol rol2 = roleRepository.findFirstByNombre(RoleEnum.ADMIN);
-		Rol rol3 = roleRepository.findFirstByNombre(RoleEnum.USER);
+        Rol rol2 = rolRepositorio.findByNombre(RolEnum.ADMIN);
+		Rol rol3 = rolRepositorio.findByNombre(RolEnum.USER);
 
 		Usuario usuario = Usuario.builder()
 				.auth0Id("auth0|123")
@@ -54,7 +54,7 @@ public class SistemasDistribuidosApplication implements CommandLineRunner {
 				.email("franlugea03@gmail.com")
 				.roles(Set.of(rol2,rol3))
 				.build();
-		usuario = userRepository.save(usuario);
+		usuario = usuarioRepositorio.save(usuario);
 
 		ActividadFisica actividadFisica = new ActividadFisica();
 		actividadFisica.setNombre(ActividadFisicaEnum.CROSSFIT);
@@ -71,7 +71,7 @@ public class SistemasDistribuidosApplication implements CommandLineRunner {
 		ActividadFisica actividadFisica4 = new ActividadFisica();
 		actividadFisica4.setNombre(ActividadFisicaEnum.SPINNING);
 
-		actividadFisicaRepository.saveAll(List.of(actividadFisica,actividadFisica1,actividadFisica2,actividadFisica3,actividadFisica4));
+		actividadFisicaRepositorio.saveAll(List.of(actividadFisica,actividadFisica1,actividadFisica2,actividadFisica3,actividadFisica4));
 
 		/*ActividadFisica actividadFisica = actividadFisicaRepository.findById(1L).get();
 		Clase clase= new Clase();
