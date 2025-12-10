@@ -22,7 +22,7 @@ public class ClaseControlador {
         return ResponseEntity.ok(claseServicioImpl.obtenerTodasLasClases());
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/usuario")
     public ResponseEntity<?> obtenerClasesUsuario(){
         return ResponseEntity.ok(claseServicioImpl.obtenerClasesDisponibles());

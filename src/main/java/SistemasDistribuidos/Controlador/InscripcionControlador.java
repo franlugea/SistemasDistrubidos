@@ -36,7 +36,7 @@ public class InscripcionControlador {
         return ResponseEntity.ok(inscripcionServicioImpl.obtenerUsuariosInscriptos(idClase));
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/clases")
     public ResponseEntity<?> obtenerClasesDelUsuario(@AuthenticationPrincipal Jwt jwt){
         String auth0Id= jwt.getClaimAsString("sub");
