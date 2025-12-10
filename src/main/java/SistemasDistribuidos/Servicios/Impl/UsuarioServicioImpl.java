@@ -33,6 +33,7 @@ public class UsuarioServicioImpl implements UsuarioServicio {
     public void registrarUsuario(CrearUsuarioDto usuarioDto) {
         if(usuarioRepositorio.existsByAuth0Id(usuarioDto.auth0Id())){
             this.actualizarInformacionUsuario(usuarioDto);
+            return;
         }
 
 

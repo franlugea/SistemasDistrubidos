@@ -17,6 +17,8 @@ public interface ClaseMapper {
     @Mapping(target = "cupoDisponible", source = "cupoDisponible")
     ClaseDto toClaseDto(Clase clase);
 
+    List<ClaseDto> toClaseDtoList(List<Clase> clases);
+
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "cupoMaximo", source = "cupoMaximo")
     @Mapping(target = "cupoDisponible", source = "cupoMaximo")
@@ -27,7 +29,6 @@ public interface ClaseMapper {
 
     List<InscriptoDto> toInscriptosDto(Set<Inscriptos> inscripciones);
 
-    List<ClaseDto> toClaseDtoList(List<Clase> clases);
 
      @Mapping(source = "nombre", target = "nombre", qualifiedByName = "mapEnumToString")
     ActividadFisicaDto toActividadFisicaDto(ActividadFisica actividadFisica);

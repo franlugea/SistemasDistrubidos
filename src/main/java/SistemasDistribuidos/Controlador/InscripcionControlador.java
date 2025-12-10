@@ -18,7 +18,7 @@ public class InscripcionControlador {
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/{idClase}/inscribir")
     public ResponseEntity<?> inscribirUsuario(@PathVariable Long idClase, @AuthenticationPrincipal Jwt jwt){
-        String auth0Id= jwt.getClaimAsString("sub");
+        String auth0Id=jwt.getClaimAsString("sub");
         return ResponseEntity.ok(inscripcionServicioImpl.incribirUsuario(auth0Id,idClase));
     }
 
@@ -39,7 +39,7 @@ public class InscripcionControlador {
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/clases")
     public ResponseEntity<?> obtenerClasesDelUsuario(@AuthenticationPrincipal Jwt jwt){
-        String auth0Id= jwt.getClaimAsString("sub");
+        String auth0Id=jwt.getClaimAsString("sub");
         return ResponseEntity.ok(inscripcionServicioImpl.obtenerClasesDelUsuario(auth0Id));
     }
 

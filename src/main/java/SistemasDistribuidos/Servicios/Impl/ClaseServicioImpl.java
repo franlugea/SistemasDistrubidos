@@ -37,7 +37,6 @@ public class ClaseServicioImpl implements ClaseServicio {
     public List<ClaseDto> obtenerTodasLasClases(){
         List<Clase> clases = claseRepositorio.findAll();
         List<ClaseDto> clasesDto= claseMapper.toClaseDtoList(clases);
-        System.out.println("Cupo maximo:"+ clasesDto.get(0).cupoMaximo()+ "Cupo Disponible: "+ clasesDto.get(0).cupoDisponible());
         return clasesDto;
     }
 
